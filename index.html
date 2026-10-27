@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Estudos: Biblioteca</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS with Typography Plugin for beautiful reading experience -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6', // Teal 500
+                            600: '#0d9488', // Teal 600
+                            700: '#0f766e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Oculta scrollbar no índice lateral para um visual mais limpo */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        /* Ajuste de âncora para não ficar escondido atrás de cabeçalhos fixos se houver */
+        h2, h3 {
+            scroll-margin-top: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- CABEÇALHO -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="goHome()" tabindex="0" role="button" aria-label="Voltar para a página inicial">
+                <!-- Ícone Livro -->
+                <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <h1 class="font-bold text-lg sm:text-xl text-slate-900 tracking-tight">Central de Estudos</h1>
+            </div>
+            <!-- Botão de busca (visual apenas mobile) / Placeholder -->
+            <div class="hidden sm:block text-sm text-slate-500">
+                Sistema de Gerenciamento de Biblioteca
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ========================================== -->
+        <!-- VIEW PRINCIPAL (HOME) -->
+        <!-- ========================================== -->
+        <div id="home-view" class="block animate-fade-in">
+            
+            <div class="mb-10 text-center sm:text-left">
+                <h2 class="text-3xl font-bold text-slate-900 mb-3">Materiais de Apoio</h2>
+                <p class="text-slate-600 max-w-2xl text-lg">Acesse e estude os materiais do projeto de forma organizada e intuitiva. Utilize a busca para encontrar conteúdos rapidamente.</p>
+            </div>
+
+            <!-- Busca -->
+            <div class="mb-10 relative max-w-md">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <input type="text" id="searchInput" class="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-shadow shadow-sm" placeholder="Buscar materiais...">
+            </div>
+
+            <!-- Categoria: Materiais de Estudo -->
+            <section class="mb-12">
+                <h3 class="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Materiais de Estudo
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="materiais-grid">
+                    
+                    <!-- Card 1 -->
+                    <article class="material-card bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col transition-all hover:shadow-md hover:border-slate-300">
+                        <div class="flex-grow">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700 mb-4">Leitura Recomendada</span>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Guia de Estudo UML</h4>
+                            <p class="text-slate-600 text-sm mb-6 line-clamp-3">Visão geral do sistema, conceitos de UML, explicação detalhada das classes, relacionamentos e cenários de funcionamento prático.</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-center gap-4 mt-auto pt-4 border-t border-slate-100">
+                            <button onclick="showDocument('doc-guia')" class="w-full sm:w-auto flex-1 bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
+                                Estudar material
+                            </button>
+                            <a href="Material de Estudo - UML.pdf" download="Material de Estudo - UML.pdf" class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 p-2 focus:outline-none focus:underline" aria-label="Baixar PDF original do Guia UML">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                PDF Original
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="material-card bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col transition-all hover:shadow-md hover:border-slate-300">
+                        <div class="flex-grow">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 mb-4">Apresentação</span>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Roteiro de Apresentação</h4>
+                            <p class="text-slate-600 text-sm mb-6 line-clamp-3">Roteiro dividido para apresentação oral, abordando o funcionamento do sistema pela perspectiva de usuários e bibliotecários.</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-center gap-4 mt-auto pt-4 border-t border-slate-100">
+                            <button onclick="showDocument('doc-roteiro')" class="w-full sm:w-auto flex-1 bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
+                                Estudar material
+                            </button>
+                            <a href="Roteiro de Apresentação.pdf" download="Roteiro de Apresentação.pdf" class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 p-2 focus:outline-none focus:underline" aria-label="Baixar PDF original do Roteiro">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                PDF Original
+                            </a>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- Categoria: Recursos Complementares -->
+            <section>
+                <h3 class="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Recursos Complementares
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="recursos-grid">
+                    
+                    <!-- Recurso 1 -->
+                    <a href="Diagrama de Classes.html" target="_blank" class="material-card group bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4 hover:border-brand-500 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <div class="p-3 bg-slate-50 text-slate-400 group-hover:text-brand-600 group-hover:bg-brand-50 rounded-lg transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Diagrama de Classes</h4>
+                            <p class="text-sm text-slate-500 mt-1">Diagrama UML interativo em HTML.</p>
+                            <span class="text-xs font-medium text-brand-600 mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">Abrir em nova aba →</span>
+                        </div>
+                    </a>
+
+                    <!-- Recurso 2 -->
+                    <a href="Diagrama Explicado.mp3" target="_blank" class="material-card group bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4 hover:border-brand-500 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <div class="p-3 bg-slate-50 text-slate-400 group-hover:text-brand-600 group-hover:bg-brand-50 rounded-lg transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Áudio Explicativo</h4>
+                            <p class="text-sm text-slate-500 mt-1">Explicação em áudio (.m4a) sobre o diagrama.</p>
+                            <span class="text-xs font-medium text-brand-600 mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">Ouvir áudio →</span>
+                        </div>
+                    </a>
+
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW DE LEITURA -->
+        <!-- ========================================== -->
+        <div id="reading-view" class="hidden">
+            
+            <!-- Navegação de topo -->
+            <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <button onclick="goHome()" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-300 rounded px-2 py-1 -ml-2">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Voltar à lista de materiais
+                </button>
+
+                <a id="active-download-btn" href="#" download class="inline-flex items-center px-3 py-1.5 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 shadow-sm transition-colors">
+                    <svg class="w-4 h-4 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Baixar PDF Original
+                </a>
+            </div>
+
+            <!-- Layout Leitura (Índice + Conteúdo) -->
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                
+                <!-- Índice Lateral / Topo Mobile -->
+                <aside class="w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-24 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden z-20">
+                    <!-- Botão Toggle Mobile -->
+                    <button id="toc-toggle" class="w-full flex items-center justify-between p-4 lg:hidden text-left focus:outline-none focus:bg-slate-50 transition-colors">
+                        <span class="font-semibold text-slate-800">Índice do Conteúdo</span>
+                        <svg id="toc-icon" class="w-5 h-5 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    
+                    <!-- Título Desktop -->
+                    <div class="hidden lg:block p-4 border-b border-slate-100 bg-slate-50">
+                        <h3 class="font-semibold text-slate-800 text-sm uppercase tracking-wider">Nesta página</h3>
+                    </div>
+
+                    <!-- Lista de links -->
+                    <nav id="toc-menu" class="hidden lg:block max-h-[60vh] overflow-y-auto no-scrollbar p-2">
+                        <ul id="toc-list" class="space-y-1">
+                            <!-- Injetado via JS -->
+                        </ul>
+                    </nav>
+                </aside>
+
+                <!-- Área de Texto -->
+                <div class="w-full lg:flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-10">
+                    <article class="prose prose-slate max-w-none prose-headings:font-semibold prose-a:text-brand-600 hover:prose-a:text-brand-700 prose-h1:text-3xl prose-h2:text-2xl prose-h2:border-b prose-h2:pb-2 prose-h2:mt-10 prose-table:mt-4">
+                        
+                        <!-- CONTEÚDO 1: GUIA -->
+                        <div id="doc-guia" class="doc-content hidden">
+                            <h1>Guia de Estudo UML</h1>
+                            <p class="lead text-lg text-slate-600">Sistema de Gerenciamento de Biblioteca</p>
+
+                            <h2>1. Visão Geral do Sistema</h2>
+                            <p>O Sistema de Gerenciamento de Biblioteca apresentado no diagrama tem como finalidade principal organizar e controlar o acervo de livros e as interações dos usuários com esse acervo. Ele foi desenhado para facilitar a vida tanto de quem pega livros emprestados quanto de quem administra a biblioteca.</p>
+                            <p>Neste sistema, os leitores podem consultar um catálogo de obras para encontrar livros do seu interesse, realizar empréstimos de cópias físicas (exemplares), renovar prazos e devolver os itens. Além disso, o sistema controla automaticamente a situação financeira e cadastral do leitor, gerenciando multas por atrasos ou danos e mantendo uma conta de débitos.</p>
+                            <p>Por outro lado, o bibliotecário atua na administração: ele é responsável por cadastrar novos exemplares físicos no sistema, registrar os empréstimos realizados pelos leitores e anotar eventuais danos que os livros sofram durante o uso. Tudo isso é amarrado por serviços centrais que gerenciam a autenticação (login), o controle de empréstimos e o cálculo de multas, garantindo que as regras da biblioteca sejam aplicadas corretamente.</p>
+
+                            <h2>2. Conceitos Básicos de UML</h2>
+                            <p>Para compreender este diagrama de classes UML, é preciso conhecer os elementos básicos que o compõem. Pense no diagrama como a planta baixa de uma casa: ele mostra as estruturas e como elas se conectam.</p>
+                            <ul>
+                                <li><strong>Classe:</strong> É representada por um retângulo e funciona como um "molde" ou "modelo" para criar objetos no sistema. Por exemplo, a classe Leitor define quais informações e ações todo leitor da biblioteca terá.</li>
+                                <li><strong>Atributo:</strong> São as informações (características) que a classe armazena, listadas na parte do meio do retângulo. Exemplo: o nome e o email de um usuário.</li>
+                                <li><strong>Método:</strong> São as ações ou operações que a classe consegue realizar, listadas na parte inferior do retângulo. Exemplo: o ato de autenticar() ou renovar().</li>
+                                <li><strong>Visibilidade:</strong> Os símbolos ao lado de atributos e métodos indicam quem pode acessá-los:
+                                    <ul>
+                                        <li><strong>+ (Público):</strong> Qualquer outra parte do sistema pode acessar e usar.</li>
+                                        <li><strong>- (Privado):</strong> Somente a própria classe pode acessar ou modificar diretamente aquela informação.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Associação:</strong> Linhas sólidas conectando duas classes indicam que elas conversam ou dependem uma da outra.</li>
+                            </ul>
+
+                            <h2>3. Explicação Individual das Classes</h2>
+                            
+                            <div class="mb-8">
+                                <h3>ServicoAutenticacao</h3>
+                                <p><strong>O que é:</strong> Um controlador de segurança do sistema.<br>
+                                <strong>Para que serve:</strong> Responsável por verificar quem está tentando acessar o sistema e garantir que apenas pessoas autorizadas entrem.<br>
+                                <strong>Métodos:</strong> <code>+autenticar (login, senha)</code> recebe login e senha. Verifica e retorna os dados do Usuario. Ex: Tela inicial de login.</p>
+                            </div>
+
+                            <div class="mb-8">
+                                <h3>Usuario</h3>
+                                <p><strong>O que é:</strong> O modelo geral para qualquer pessoa.<br>
+                                <strong>Para que serve:</strong> Centralizar dados comuns a todos (leitores/bibliotecários).<br>
+                                <strong>Atributos:</strong> id, nome, email, login, senhaHash (criptografada), situacao (baseado em Situacao Usuario).<br>
+                                <strong>Métodos:</strong> <code>+consultarCatalogo(criterio)</code> retorna obras. <code>+consultarDetalhes(idObra)</code> busca livro específico.</p>
+                            </div>
+
+                            <div class="mb-8 flex flex-col md:flex-row gap-6">
+                                <div class="flex-1">
+                                    <h3>Leitor</h3>
+                                    <p><strong>O que é:</strong> Usuario focado em consumir o acervo. (Aluno ou cliente).<br>
+                                    <strong>Atributos:</strong> matricula (código do aluno).<br>
+                                    <strong>Métodos:</strong> <code>+consultarMeusEmprestimos()</code>, <code>+consultarMultasPendencias()</code>, <code>+estaApto()</code>.</p>
+                                </div>
+                                <div class="flex-1">
+                                    <h3>Bibliotecario</h3>
+                                    <p><strong>O que é:</strong> Administrador do acervo.<br>
+                                    <strong>Atributos:</strong> matriculaFuncional.<br>
+                                    <strong>Métodos:</strong> <code>+cadastrarExemplar(obra, codigo)</code>, <code>+editarExemplar(exemplar)</code>, <code>+registrarDano(...)</code>.</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-8">
+                                <h3>ContaDebitos, Multa e Serviços Financeiros</h3>
+                                <ul>
+                                    <li><strong>ContaDebitos:</strong> A "carteira virtual" do leitor. Centraliza dívidas. Possui <code>saldoDevedor</code> e métodos de validação.</li>
+                                    <li><strong>ServicoMulta e Multa:</strong> Processador financeiro e a cobrança em si. O serviço calcula e debita, a multa armazena o valor, motivo e se foi paga.</li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-8">
+                                <h3>Fluxo Físico: Obra, Exemplar e Empréstimo</h3>
+                                <ul>
+                                    <li><strong>Obra e Catalogo:</strong> Entidade intelectual e sua vitrine. Obra tem ISBN, autor. Catálogo oferece buscas.</li>
+                                    <li><strong>Exemplar:</strong> O livro físico na prateleira. Tem <code>codigoTombo</code> e uma <code>SituacaoExemplar</code> (DISPONIVEL, EMPRESTADO...).</li>
+                                    <li><strong>Emprestimo e Renovacao:</strong> Registro da locação controlando datas. A renovação estende o prazo guardando histórico.</li>
+                                    <li><strong>ServicoEmprestimo:</strong> O Maestro. Controla disponibilidade, checa o usuário e efetiva o empréstimo/devolução.</li>
+                                </ul>
+                            </div>
+
+                            <h2>4. Relacionamentos e Multiplicidades</h2>
+                            <p>As linhas do diagrama conectam as partes do sistema. A direção das setas e os números explicam as regras:</p>
+                            <ul>
+                                <li><strong>ServicoAutenticacao → Usuario (1 para 0..*):</strong> Serviço lida com zero a muitos usuários.</li>
+                                <li><strong>Bibliotecario → Exemplar (1 para 0..*):</strong> Um funcionário pode cadastrar de zero a milhares de livros.</li>
+                                <li><strong>Leitor → Emprestimo (1 para 0..*):</strong> Um leitor pode pegar nenhum ou vários empréstimos ao longo da vida.</li>
+                                <li><strong>Emprestimo → Exemplar (0..* para 1):</strong> Um exemplar pode ter um histórico de muitos empréstimos, mas cada registro está ligado a apenas uma cópia física.</li>
+                                <li><strong>Devolucao → Multa (1 para 0..1):</strong> Uma devolução gera no máximo uma multa, ou zero se entregue no prazo.</li>
+                            </ul>
+
+                            <h2>5. Heranças, Composições e Agregações</h2>
+                            <p>Definem dependências profundas entre as classes:</p>
+                            
+                            <h3>Generalização (Herança) - A Seta Branca</h3>
+                            <p><strong>Usuario ⊲ Leitor e Bibliotecario:</strong> Esta é a relação de "é um". Evita repetição de atributos como nome e email, herdados pela classe filha.</p>
+
+                            <h3>Composição - O Losango Preenchido (Preto)</h3>
+                            <p>Vínculo forte (todo-parte). Se o "todo" for apagado, a "parte" é excluída.</p>
+                            <ul>
+                                <li><strong>Leitor → ContaDebitos:</strong> Se o cadastro for cancelado, a conta virtual deixa de existir.</li>
+                                <li><strong>Emprestimo → Renovacao / Devolucao:</strong> Não existe renovação ou devolução solta sem o empréstimo originador.</li>
+                            </ul>
+
+                            <h3>Agregação - O Losango Vazio (Branco)</h3>
+                            <p>Vínculo fraco. A parte existe independentemente se o todo for destruído.</p>
+                            <ul>
+                                <li><strong>Catalogo → Obra:</strong> Se o catálogo falhar, a obra ainda faz sentido.</li>
+                                <li><strong>Obra → Exemplar:</strong> Se a obra for descontinuada, os livros físicos impressos continuam existindo.</li>
+                            </ul>
+
+                            <h2>6. Cenários Práticos de Funcionamento</h2>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-800 m-0">Cenário A - Login do leitor</h3>
+                                    <p class="mt-1">O sistema chama <code>ServicoAutenticacao</code>. O método <code>autenticar()</code> verifica os dados. Se coincidirem, retorna o objeto completo (perfil de Leitor).</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-800 m-0">Cenário B - Consulta ao catálogo</h3>
+                                    <p class="mt-1">O leitor usa <code>consultarCatalogo(criterio)</code>. O Catalogo pesquisa entre as Obras e retorna uma lista.</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-800 m-0">Cenário C - Realização de empréstimo</h3>
+                                    <p class="mt-1">Bibliotecário utiliza <code>ServicoEmprestimo.emprestar()</code>. Checa disponibilidade e situação. Cria-se ficha em Emprestimo e o exemplar muda para EMPRESTADO.</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-800 m-0">Cenário D - Renovação de empréstimo</h3>
+                                    <p class="mt-1">Leitor renova. Ativa-se <code>renovar(emprestimo)</code>. Uma ficha aninhada de Renovacao é criada (composição forte), com nova data.</p>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-800 m-0">Cenário E - Devolução com atraso</h3>
+                                    <p class="mt-1">Devolução aciona cálculo de atraso. <code>ServicoMulta</code> aplica multa que é anexada à <code>ContaDebitos</code> do leitor.</p>
+                                </div>
+                            </div>
+
+                            <h2>7. Tipos de Dados e Assinaturas</h2>
+                            <div class="overflow-x-auto my-6 rounded-lg border border-slate-200">
+                                <table class="min-w-full divide-y divide-slate-200 m-0">
+                                    <thead class="bg-slate-50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Tipo</th>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Descrição</th>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Exemplo Prático</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-slate-200">
+                                        <tr><td class="px-4 py-3 font-mono text-sm">String</td><td class="px-4 py-3 text-sm">Representa texto.</td><td class="px-4 py-3 text-sm">Motivo de multa, nome do catálogo.</td></tr>
+                                        <tr><td class="px-4 py-3 font-mono text-sm">int</td><td class="px-4 py-3 text-sm">Número inteiro (sem decimais).</td><td class="px-4 py-3 text-sm">diasAtraso, id da obra.</td></tr>
+                                        <tr><td class="px-4 py-3 font-mono text-sm">double</td><td class="px-4 py-3 text-sm">Número com decimais (dinheiro).</td><td class="px-4 py-3 text-sm">saldoDevedor, valor da multa.</td></tr>
+                                        <tr><td class="px-4 py-3 font-mono text-sm">boolean</td><td class="px-4 py-3 text-sm">Valor lógico (true/false).</td><td class="px-4 py-3 text-sm">Se um empréstimo está ativo ou pago.</td></tr>
+                                        <tr><td class="px-4 py-3 font-mono text-sm">Date</td><td class="px-4 py-3 text-sm">Datas no calendário.</td><td class="px-4 py-3 text-sm">dataEmprestimo, dataDevolucao.</td></tr>
+                                        <tr><td class="px-4 py-3 font-mono text-sm">List&lt;T&gt;</td><td class="px-4 py-3 text-sm">Lista com vários itens.</td><td class="px-4 py-3 text-sm">List&lt;Obra&gt; (resultado de pesquisa).</td></tr>
+                                        <tr><td class="px-4 py-3 font-mono text-sm">void</td><td class="px-4 py-3 text-sm">Executa ação sem devolver resposta.</td><td class="px-4 py-3 text-sm">atualizarDados() apenas altera.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <h2>8. Considerações e Limitações</h2>
+                            <p>O diagrama informa que algumas linhas foram omitidas para manter o visual limpo, mas são subentendidas: Usuario relaciona-se com Catalogo; Bibliotecario com Obra e Devolucao; ServicoEmprestimo interage ativamente com Leitor, Exemplar e Devolucao.</p>
+                            <p><strong>Nota sobre bloqueios:</strong> O modelo indica que se um leitor ficar <code>COM_PENDENCIA</code>, ele não poderá agir. Apesar da ContaDebitos em si bloquear novos empréstimos de forma indireta, a lógica é centralizada e checada pelos métodos da interface (como <code>estaApto()</code>). Os elementos dialogam perfeitamente integrando regras financeiras, cadastrais e logísticas.</p>
+
+                        </div>
+
+                        <!-- CONTEÚDO 2: ROTEIRO -->
+                        <div id="doc-roteiro" class="doc-content hidden">
+                            <h1>Roteiro de Apresentação UML</h1>
+                            <p class="lead text-lg text-slate-600">Defesa de Projeto - Divisão de Falas</p>
+
+                            <h2>Pessoa 1 - Introdução e Catálogo</h2>
+                            <p>Nosso objetivo hoje é apresentar como funciona o Sistema de Gerenciamento de Biblioteca, focando nas operações reais de quem utiliza e de quem administra o espaço. Vamos explicar a estrutura do sistema acompanhando a jornada de um livro e de um leitor.</p>
+                            
+                            <p>Tudo começa no momento do acesso. Quando alguém tenta entrar no sistema, quem atua é o <code>ServicoAutenticacao</code>. Ele possui um método chamado <code>autenticar(login, senha)</code> que verifica as credenciais digitadas. Por questão de segurança, a senha é armazenada como um "hash", ou seja, de forma criptografada. Se os dados estiverem corretos, o serviço libera o acesso devolvendo os dados do usuário.</p>
+                            
+                            <p>No sistema, existe uma classe geral chamada <strong>Usuario</strong>. Ela concentra as informações que todos precisam ter: nome, e-mail, login, senha e uma situação. A situação do usuário é controlada por uma lista fixa, chamada <code>SituacaoUsuario</code>, que define se a pessoa está no estado ATIVO, BLOQUEADO ou COM_PENDENCIA. A partir desse usuário geral, o sistema usa o que chamamos de herança para criar dois perfis específicos. O primeiro é o <strong>Leitor</strong>, que representa o aluno ou cliente, identificado por uma matrícula. O segundo é o <strong>Bibliotecario</strong>, o funcionário que administra a biblioteca, identificado por uma matrícula funcional. Eles herdam os dados básicos, mas possuem permissões diferentes.</p>
+                            
+                            <p>Imaginando que um leitor acabou de fazer login, o próximo passo geralmente é procurar um livro. Ele usa o método <code>consultarCatalogo(criterio)</code>. Essa busca acontece no <strong>Catalogo</strong>, que é a classe responsável por organizar as obras. Aqui existe um conceito fundamental do nosso modelo: a diferença entre Obra e Exemplar.</p>
+                            
+                            <p>A <strong>Obra</strong> representa a ideia intelectual do livro, como o título "Harry Potter", contendo o autor, ISBN e ano de publicação. Já o <strong>Exemplar</strong> é o livro físico, a cópia de papel que fica na prateleira. Cada exemplar possui um código tombo, que funciona como uma etiqueta ou código de barras único. Uma única obra pode possuir várias cópias físicas. Essa relação é chamada de agregação, um vínculo fraco onde a obra existe independentemente dos exemplares físicos. O leitor pode visualizar a obra por meio de <code>consultarDetalhes(idObra)</code> e descobrir quantas cópias existem pelo método <code>totalDisponiveis()</code>.</p>
+                            
+                            <p>É importante notar que cada cópia física tem sua própria situação, definida pela enumeração <code>SituacaoExemplar</code>: ela pode estar DISPONIVEL, EMPRESTADO, DANIFICADO ou EXTRAVIADO. Portanto, achar o livro no catálogo não garante que a cópia esteja livre. Agora que o leitor localizou, passo a palavra.</p>
+
+                            <h2>Pessoa 2 - Empréstimos e Renovações</h2>
+                            <p>Dando continuidade, quando o leitor encontra a obra, ele vai até a prateleira pegar o exemplar físico. Quem administra esses itens é o <strong>Bibliotecario</strong>. Se a biblioteca comprar livros novos, é o bibliotecário que usa o método <code>cadastrarExemplar(obra, codigoTombo)</code> para inserir as novas cópias no sistema, ou <code>editarExemplar(exemplar)</code> para atualizar seus dados.</p>
+                            
+                            <p>Para realizar a retirada do livro, entra em ação o "cérebro" das regras de negócio: o <strong>ServicoEmprestimo</strong>. Ele gerencia todas as operações de circulação. O bibliotecário inicia a operação acionando o método <code>emprestar(leitor, exemplar)</code> nesse serviço.</p>
+                            
+                            <p>Antes de autorizar o empréstimo, o sistema faz duas verificações independentes. Primeiro, usa <code>verificarDisponibilidade(exemplar)</code> para garantir que a cópia física exata está com o status DISPONIVEL. Segundo, usa <code>verificarSituacaoUsuario(leitor)</code>. Dentro da classe Leitor, existe o método <code>estaApto()</code>, que confirma se o usuário está liberado para pegar livros, ou seja, se não está com status BLOQUEADO ou COM_PENDENCIA.</p>
+                            
+                            <p>Se ambas as verificações passarem, o sistema cria um registro na classe <strong>Emprestimo</strong>. Esse registro conecta aquele leitor específico àquele exemplar físico específico. O empréstimo guarda a data de empréstimo, calcula a data de devolução prevista e marca o atributo ativo como verdadeiro. Simultaneamente, o sistema altera a situação do exemplar de disponível para EMPRESTADO.</p>
+                            
+                            <p>Se o prazo estiver acabando e o leitor precisar de mais tempo, ele pode solicitar uma renovação. O sistema chama o método <code>renovar(emprestimo)</code> no serviço de empréstimo. Isso cria um novo registro na classe <strong>Renovacao</strong>. Essa relação é uma composição forte: a renovação só existe atrelada àquele empréstimo original. O registro de renovação salva a data da renovação (o dia do pedido) e estabelece uma nova data prevista de entrega. O material de estudo não define um limite máximo de renovações, indicando que um empréstimo pode ter várias renovações registradas.</p>
+                            
+                            <p>Mas, eventualmente, o prazo acaba e o exemplar precisa retornar. Vou passar para a Pessoa 3, que vai explicar como o sistema lida com devoluções, atrasos e os possíveis problemas desse processo.</p>
+
+                            <h2>Pessoa 3 - Devoluções e Multas</h2>
+                            <p>Exatamente. O ciclo do empréstimo termina na devolução. Quando o leitor traz o livro de volta, o bibliotecário utiliza o serviço de empréstimo e aciona o método <code>devolver(emprestimo)</code>.</p>
+                            
+                            <p>Essa ação cria um registro na classe <strong>Devolucao</strong>. A devolução encerra o empréstimo, mudando seu atributo ativo para falso. Neste momento, o sistema executa o método <code>calcularAtraso()</code>. Ele compara a data efetiva da devolução com a data prevista e gera a quantidade de dias de atraso. O método <code>estaAtrasado()</code> na classe Emprestimo ajuda a identificar se a data atual já ultrapassou o limite.</p>
+                            
+                            <p>Se houver atraso, o <strong>ServicoMulta</strong> entra em ação, chamando <code>aplicarMulta(devolucao)</code>. Isso gera um registro na classe <strong>Multa</strong>, que guarda o valor, o motivo (como a quantidade de dias), a data de geração e um marcador booleano indicando se já foi paga. Cada devolução gera no máximo uma multa, mas o leitor possui uma classe chamada <strong>ContaDebitos</strong> associada ao seu cadastro. Essa conta acumula as multas recebidas pelo método <code>adicionarMulta(multa)</code> e atualiza o saldo devedor.</p>
+                            
+                            <p>É essa conta de débitos que interage com a situação do leitor. Se ele tiver saldo devedor apontado no método <code>validarDebitos()</code>, sua situação muda para COM_PENDENCIA, o que o impede de pegar novos livros quando o método <code>estaApto()</code> for testado. Quando o leitor quita a dívida, o sistema usa <code>debitarMulta(multa)</code> no serviço de multas para dar baixa. Vale notar que o diagrama não estipula valores fixos de tarifas, pois isso depende das regras internas da biblioteca.</p>
+                            
+                            <p>Além de multas por atraso, o livro pode retornar danificado. Se isso acontecer, o bibliotecário usa <code>registrarDano(devolucao, descricao)</code>. O sistema cria um <strong>RegistroDano</strong> ligado àquela devolução, anotando um valor estimado de conserto. Imediatamente, a situação do exemplar físico muda para DANIFICADO. O material não afirma que o valor estimado do dano gera automaticamente uma cobrança na conta de débitos, mostrando que multas por atraso e registros de danos são tratados por classes diferentes.</p>
+                            
+                            <p>Em resumo, o sistema funciona conectando classes que representam informações (como Usuário, Obra e Exemplar), registros de histórico (Empréstimo, Renovação e Devolução) e serviços que aplicam as regras (Autenticação, Empréstimo e Multa). Isso garante o controle completo do acervo e dos usuários. Muito obrigado pela atenção!</p>
+
+                        </div>
+
+                    </article>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-slate-500">
+            Projeto Acadêmico - Sistema de Gerenciamento de Biblioteca
+        </div>
+    </footer>
+
+    <!-- LOGIC JS -->
+    <script>
+        // DOM Elements
+        const homeView = document.getElementById('home-view');
+        const readingView = document.getElementById('reading-view');
+        const searchInput = document.getElementById('searchInput');
+        const materialCards = document.querySelectorAll('.material-card');
+        const tocList = document.getElementById('toc-list');
+        const tocMenu = document.getElementById('toc-menu');
+        const tocToggle = document.getElementById('toc-toggle');
+        const tocIcon = document.getElementById('toc-icon');
+        const activeDownloadBtn = document.getElementById('active-download-btn');
+
+        // Mostra um documento e constrói o índice
+        function showDocument(docId) {
+            // Alterna visibilidade principal
+            homeView.classList.add('hidden');
+            readingView.classList.remove('hidden');
+            window.scrollTo(0, 0);
+
+            // Esconde todos os textos, mostra o solicitado
+            document.querySelectorAll('.doc-content').forEach(el => el.classList.add('hidden'));
+            const activeDoc = document.getElementById(docId);
+            activeDoc.classList.remove('hidden');
+
+            // Atualiza o botão de download de acordo com o doc aberto
+            if (docId === 'doc-guia') {
+                activeDownloadBtn.href = "Material de Estudo - UML.pdf";
+                activeDownloadBtn.download = "Material de Estudo - UML.pdf";
+            } else if (docId === 'doc-roteiro') {
+                activeDownloadBtn.href = "Roteiro de Apresentação.pdf";
+                activeDownloadBtn.download = "Roteiro de Apresentação.pdf";
+            }
+
+            buildTOC(activeDoc);
+            
+            // Garante que o menu mobile inicie fechado
+            tocMenu.classList.add('hidden');
+            tocMenu.classList.remove('block');
+            tocIcon.classList.remove('rotate-180');
+        }
+
+        // Retorna para a página inicial
+        function goHome() {
+            readingView.classList.add('hidden');
+            homeView.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // Constrói o sumário automaticamente lendo os <h2>
+        function buildTOC(container) {
+            tocList.innerHTML = '';
+            const headings = container.querySelectorAll('h2');
+            
+            if (headings.length === 0) {
+                tocList.innerHTML = '<li class="text-slate-400 text-sm italic px-2">Sem tópicos</li>';
+                return;
+            }
+
+            headings.forEach((h, index) => {
+                // Garante que todo h2 tenha um ID único
+                const id = `toc-heading-${index}`;
+                h.id = id;
+
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                
+                a.href = `#${id}`;
+                a.textContent = h.textContent;
+                a.className = 'block text-sm text-slate-600 hover:text-brand-700 hover:bg-brand-50 px-3 py-2 rounded-md transition-colors';
+                
+                // Fecha menu no mobile ao clicar num link
+                a.addEventListener('click', (e) => {
+                    if (window.innerWidth < 1024) { // 1024px é o bg-lg do tailwind
+                        tocMenu.classList.add('hidden');
+                        tocMenu.classList.remove('block');
+                        tocIcon.classList.remove('rotate-180');
+                    }
+                });
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+        }
+
+        // Funcionalidade de Busca
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            
+            materialCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(term)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Funcionalidade do Toggle do Menu (Mobile)
+        tocToggle.addEventListener('click', () => {
+            if (tocMenu.classList.contains('hidden')) {
+                tocMenu.classList.remove('hidden');
+                tocMenu.classList.add('block');
+                tocIcon.classList.add('rotate-180');
+            } else {
+                tocMenu.classList.add('hidden');
+                tocMenu.classList.remove('block');
+                tocIcon.classList.remove('rotate-180');
+            }
+        });
+
+        // Tratamento de resize para garantir exibição correta do TOC
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) { // Desktop
+                tocMenu.classList.remove('hidden');
+                tocMenu.classList.add('block');
+            } else if (!readingView.classList.contains('hidden') && !tocIcon.classList.contains('rotate-180')) {
+                 // Se estiver no mobile e o ícone não estiver rotacionado (fechado)
+                tocMenu.classList.add('hidden');
+                tocMenu.classList.remove('block');
+            }
+        });
+
+    </script>
+</body>
+</html>
