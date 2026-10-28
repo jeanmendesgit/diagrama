@@ -49,6 +49,10 @@
             scroll-margin-top: 2rem;
         }
 
+        code {
+            font-family: monospace;
+        }
+
         .prose code {
             background-color: #f1f5f9;
             color: #0f766e;
@@ -60,7 +64,7 @@
             font-weight: 500;
             white-space: nowrap;
         }
-        
+
         .prose code::before,
         .prose code::after {
             content: none !important;
@@ -411,7 +415,7 @@
                             
                             <p>A <strong>Obra</strong> representa a ideia intelectual do livro, como o título "Harry Potter", contendo o autor, ISBN e ano de publicação. Já o <strong>Exemplar</strong> é o livro físico, a cópia de papel que fica na prateleira. Cada exemplar possui um código tombo, que funciona como uma etiqueta ou código de barras único. Uma única obra pode possuir várias cópias físicas. Essa relação é chamada de agregação, um vínculo fraco onde a obra existe independentemente dos exemplares físicos. O leitor pode visualizar a obra por meio de <code>consultarDetalhes(idObra)</code> e descobrir quantas cópias existem pelo método <code>totalDisponiveis()</code>.</p>
                             
-                            <p>É importante notar que cada cópia física tem sua própria situação, definida pela enumeração <code>SituacaoExemplar</code>: ela pode estar DISPONIVEL, EMPRESTADO, DANIFICADO ou EXTRAVIADO. Portanto, achar o livro no catálogo não garante que a cópia esteja livre. Agora que o leitor localizou, passo a palavra.</p>
+                            <p>É importante notar que cada cópia física tem sua própria situação, definida pela enumeração <code>SituacaoExemplar</code>: ela pode estar DISPONIVEL, EMPRESTADO, DANIFICADO ou EXTRAVIADO. Portanto, achar o livro no catálogo não garante que a cópia esteja livre. Agora que o leitor encontrou a obra, como ele faz para levar a cópia para casa? Vou passar a palavra para <strong>[Nome da Pessoa 2]</strong>, que vai explicar o funcionamento dos empréstimos.</p>
 
                             <h2>Pessoa 2 - Empréstimos e Renovações</h2>
                             <p>Dando continuidade, quando o leitor encontra a obra, ele vai até a prateleira pegar o exemplar físico. Quem administra esses itens é o <strong>Bibliotecario</strong>. Se a biblioteca comprar livros novos, é o bibliotecário que usa o método <code>cadastrarExemplar(obra, codigoTombo)</code> para inserir as novas cópias no sistema, ou <code>editarExemplar(exemplar)</code> para atualizar seus dados.</p>
@@ -424,7 +428,7 @@
                             
                             <p>Se o prazo estiver acabando e o leitor precisar de mais tempo, ele pode solicitar uma renovação. O sistema chama o método <code>renovar(emprestimo)</code> no serviço de empréstimo. Isso cria um novo registro na classe <strong>Renovacao</strong>. Essa relação é uma composição forte: a renovação só existe atrelada àquele empréstimo original. O registro de renovação salva a data da renovação (o dia do pedido) e estabelece uma nova data prevista de entrega. O material de estudo não define um limite máximo de renovações, indicando que um empréstimo pode ter várias renovações registradas.</p>
                             
-                            <p>Mas, eventualmente, o prazo acaba e o exemplar precisa retornar. Vou passar para a Pessoa 3, que vai explicar como o sistema lida com devoluções, atrasos e os possíveis problemas desse processo.</p>
+                            <p>Mas, eventualmente, o prazo acaba e o exemplar precisa retornar. Vou passar para a <strong>[nome da Pessoa 3]</strong>, que vai explicar como o sistema lida com devoluções, atrasos e os possíveis problemas desse processo.</p>
 
                             <h2>Pessoa 3 - Devoluções e Multas</h2>
                             <p>Exatamente. O ciclo do empréstimo termina na devolução. Quando o leitor traz o livro de volta, o bibliotecário utiliza o serviço de empréstimo e aciona o método <code>devolver(emprestimo)</code>.</p>
