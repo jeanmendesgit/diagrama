@@ -48,6 +48,23 @@
         h2, h3 {
             scroll-margin-top: 2rem;
         }
+
+        .prose code {
+            background-color: #f1f5f9;
+            color: #0f766e;
+            padding: 2px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .prose code::before,
+        .prose code::after {
+            content: none !important;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
