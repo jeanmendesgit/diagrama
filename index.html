@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS with Typography Plugin for beautiful reading experience -->
+    <!-- Tailwind CSS with Typography Plugin -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     
@@ -36,23 +36,19 @@
     </script>
     
     <style>
-        /* Oculta scrollbar no índice lateral para um visual mais limpo */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
         .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-        /* Ajuste de âncora para não ficar escondido atrás de cabeçalhos fixos se houver */
         h2, h3 {
             scroll-margin-top: 2rem;
         }
-
         code {
             font-family: monospace;
         }
-
         .prose code {
             background-color: #f1f5f9;
             color: #0f766e;
@@ -64,10 +60,20 @@
             font-weight: 500;
             white-space: nowrap;
         }
-
         .prose code::before,
         .prose code::after {
             content: none !important;
+        }
+        /* Estilo visual para marcações de guarda UML no roteiro */
+        .guarda-tag {
+            background-color: #f0fdfa;
+            color: #0f766e;
+            border: 1px solid #ccfbf1;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.88em;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -77,11 +83,9 @@
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2 cursor-pointer" onclick="goHome()" tabindex="0" role="button" aria-label="Voltar para a página inicial">
-                <!-- Ícone Livro -->
                 <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                 <h1 class="font-bold text-lg sm:text-xl text-slate-900 tracking-tight">Central de Estudos</h1>
             </div>
-            <!-- Botão de busca (visual apenas mobile) / Placeholder -->
             <div class="hidden sm:block text-sm text-slate-500">
                 Sistema de Gerenciamento de Biblioteca
             </div>
@@ -94,11 +98,11 @@
         <!-- ========================================== -->
         <!-- VIEW PRINCIPAL (HOME) -->
         <!-- ========================================== -->
-        <div id="home-view" class="block animate-fade-in">
+        <div id="home-view" class="block">
             
-            <div class="mb-10 text-center sm:text-left">
+            <div class="mb-8 text-center sm:text-left">
                 <h2 class="text-3xl font-bold text-slate-900 mb-3">Materiais de Apoio</h2>
-                <p class="text-slate-600 max-w-2xl text-lg">Acesse e estude os materiais do projeto de forma organizada e intuitiva. Utilize a busca para encontrar conteúdos rapidamente.</p>
+                <p class="text-slate-600 max-w-2xl text-lg">Acesse o roteiro e os diagramas da entrega atual em destaque ou consulte as etapas anteriores quando precisar.</p>
             </div>
 
             <!-- Busca -->
@@ -106,89 +110,190 @@
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <input type="text" id="searchInput" class="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-shadow shadow-sm" placeholder="Buscar materiais...">
+                <input type="text" id="searchInput" class="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-shadow shadow-sm" placeholder="Buscar materiais (ex: empréstimo, classes, fork)...">
             </div>
 
-            <!-- Categoria: Materiais de Estudo -->
-            <section class="mb-12">
-                <h3 class="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Materiais de Estudo
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="materiais-grid">
-                    
-                    <!-- Card 1 -->
-                    <article class="material-card bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col transition-all hover:shadow-md hover:border-slate-300">
-                        <div class="flex-grow">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700 mb-4">Leitura Recomendada</span>
-                            <h4 class="text-lg font-bold text-slate-900 mb-2">Guia de Estudo UML</h4>
-                            <p class="text-slate-600 text-sm mb-6 line-clamp-3">Visão geral do sistema, conceitos de UML, explicação detalhada das classes, relacionamentos e cenários de funcionamento prático.</p>
+            <!-- ========================================== -->
+            <!-- SEÇÃO EM DESTAQUE: ATIVIDADE ATUAL -->
+            <!-- ========================================== -->
+            <section class="mb-14">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2.5">
+                        <span class="relative flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-600"></span>
+                        </span>
+                        Atividade Atual — Diagramas de Atividades (UML)
+                    </h3>
+                    <span class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700">
+                        Entrega Principal
+                    </span>
+                </div>
+
+                <!-- Card Principal: Roteiro -->
+                <article class="material-card bg-white rounded-2xl shadow-md border-2 border-brand-500/40 p-6 sm:p-8 mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6 transition-all hover:shadow-lg hover:border-brand-500">
+                    <div class="max-w-3xl">
+                        <div class="flex flex-wrap items-center gap-2 mb-3">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-600 text-white">Roteiro Principal</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">3 Integrantes</span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">Prof. Renan</span>
                         </div>
-                        <div class="flex flex-col sm:flex-row items-center gap-4 mt-auto pt-4 border-t border-slate-100">
-                            <button onclick="showDocument('doc-guia')" class="w-full sm:w-auto flex-1 bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
-                                Estudar material
+                        <h4 class="text-2xl font-bold text-slate-900 mb-2">Apresentação: Diagramas de Atividades</h4>
+                        <p class="text-slate-600 text-base leading-relaxed">
+                            Roteiro completo e equilibrado para a apresentação dos casos de uso <strong>Realizar Empréstimo de Exemplar</strong> e <strong>Realizar Devolução de Exemplar</strong>, detalhando raias (Leitor, Serviço de Empréstimo e Gestão de Exemplares), decisões com guardas, Fork/Join e Merge.
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center gap-3 flex-shrink-0">
+                        <button onclick="showDocument('doc-roteiro-atividades')" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-all shadow-sm hover:shadow text-center flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            Abrir Roteiro + Diagramas
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Grid das Duas Imagens dos Diagramas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Diagrama 1 -->
+                    <article class="material-card bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col transition-all hover:shadow-md hover:border-brand-300">
+                        <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-brand-700">Classe 1</span>
+                                <h4 class="font-bold text-slate-900">Realizar Empréstimo de Exemplar</h4>
+                            </div>
+                            <button onclick="openImageModal('Diagrama-Emprestimo.png', 'Classe 1 - Realizar Empréstimo de Exemplar')" class="text-xs font-medium bg-white border border-slate-200 hover:border-brand-500 hover:text-brand-700 text-slate-700 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                                Ampliar
                             </button>
-                            <a href="Material de Estudo - UML.pdf" download="Material de Estudo - UML.pdf" class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 p-2 focus:outline-none focus:underline" aria-label="Baixar PDF original do Guia UML">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                PDF Original
-                            </a>
+                        </div>
+                        <div onclick="openImageModal('Diagrama-Emprestimo.png', 'Classe 1 - Realizar Empréstimo de Exemplar')" class="p-4 bg-white flex-grow flex items-center justify-center cursor-zoom-in group relative">
+                            <img src="Diagrama-Emprestimo.png" alt="Diagrama de Atividades - Realizar Empréstimo de Exemplar" class="w-full h-56 object-contain rounded-lg transition-transform duration-200 group-hover:scale-[1.02]">
                         </div>
                     </article>
 
-                    <!-- Card 2 -->
-                    <article class="material-card bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col transition-all hover:shadow-md hover:border-slate-300">
-                        <div class="flex-grow">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 mb-4">Apresentação</span>
-                            <h4 class="text-lg font-bold text-slate-900 mb-2">Roteiro de Apresentação</h4>
-                            <p class="text-slate-600 text-sm mb-6 line-clamp-3">Roteiro dividido para apresentação oral, abordando o funcionamento do sistema pela perspectiva de usuários e bibliotecários.</p>
-                        </div>
-                        <div class="flex flex-col sm:flex-row items-center gap-4 mt-auto pt-4 border-t border-slate-100">
-                            <button onclick="showDocument('doc-roteiro')" class="w-full sm:w-auto flex-1 bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
-                                Estudar material
+                    <!-- Diagrama 2 -->
+                    <article class="material-card bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col transition-all hover:shadow-md hover:border-brand-300">
+                        <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-brand-700">Classe 2</span>
+                                <h4 class="font-bold text-slate-900">Realizar Devolução de Exemplar</h4>
+                            </div>
+                            <button onclick="openImageModal('Diagrama-Devolucao.png', 'Classe 2 - Realizar Devolução de Exemplar')" class="text-xs font-medium bg-white border border-slate-200 hover:border-brand-500 hover:text-brand-700 text-slate-700 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                                Ampliar
                             </button>
-                            <a href="Roteiro de Apresentação.pdf" download="Roteiro de Apresentação.pdf" class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 p-2 focus:outline-none focus:underline" aria-label="Baixar PDF original do Roteiro">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                PDF Original
-                            </a>
+                        </div>
+                        <div onclick="openImageModal('Diagrama-Devolucao.png', 'Classe 2 - Realizar Devolução de Exemplar')" class="p-4 bg-white flex-grow flex items-center justify-center cursor-zoom-in group relative">
+                            <img src="Diagrama-Devolucao.png" alt="Diagrama de Atividades - Realizar Devolução de Exemplar" class="w-full h-56 object-contain rounded-lg transition-transform duration-200 group-hover:scale-[1.02]">
                         </div>
                     </article>
 
                 </div>
             </section>
 
-            <!-- Categoria: Recursos Complementares -->
-            <section>
-                <h3 class="text-xl font-semibold text-slate-800 mb-6 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    Recursos Complementares
-                </h3>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="recursos-grid">
-                    
-                    <!-- Recurso 1 -->
-                    <a href="Diagrama de Classes.html" target="_blank" class="material-card group bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4 hover:border-brand-500 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand-500">
-                        <div class="p-3 bg-slate-50 text-slate-400 group-hover:text-brand-600 group-hover:bg-brand-50 rounded-lg transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+            <!-- ========================================== -->
+            <!-- SEÇÃO RECOLHIDA: ATIVIDADES ANTERIORES -->
+            <!-- ========================================== -->
+            <section class="border-t border-slate-200 pt-8">
+                <button type="button" id="archive-toggle-btn" onclick="toggleArchiveSection()" aria-expanded="false" class="w-full flex items-center justify-between bg-slate-100/80 hover:bg-slate-200/70 border border-slate-200 rounded-xl px-5 py-4 text-left transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white rounded-lg text-slate-500 border border-slate-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
                         </div>
                         <div>
-                            <h4 class="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Diagrama de Classes</h4>
-                            <p class="text-sm text-slate-500 mt-1">Diagrama UML interativo em HTML.</p>
-                            <span class="text-xs font-medium text-brand-600 mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">Abrir em nova aba →</span>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-semibold text-slate-700">Etapas Anteriores (Diagrama de Classes)</h3>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Concluída</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-500">Clique para visualizar o Guia UML, roteiro anterior, diagrama interativo e áudio.</p>
                         </div>
-                    </a>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm font-medium text-slate-600 ml-4">
+                        <span id="archive-toggle-label" class="hidden sm:inline">Mostrar</span>
+                        <svg id="archive-chevron" class="w-5 h-5 text-slate-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </button>
 
-                    <!-- Recurso 2 -->
-                    <a href="Diagrama Explicado.mp3" target="_blank" class="material-card group bg-white rounded-xl border border-slate-200 p-5 flex items-start gap-4 hover:border-brand-500 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand-500">
-                        <div class="p-3 bg-slate-50 text-slate-400 group-hover:text-brand-600 group-hover:bg-brand-50 rounded-lg transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                <!-- Conteúdo Oculto por Padrão -->
+                <div id="archive-content" class="hidden mt-6 space-y-8">
+                    
+                    <!-- Materiais de Estudo Anteriores -->
+                    <div>
+                        <h4 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Textos e Guias (Etapa Anterior)
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Card 1 -->
+                            <article class="material-card bg-white/90 rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col transition-all hover:shadow-md hover:border-slate-300">
+                                <div class="flex-grow">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 mb-4">Referência Base</span>
+                                    <h4 class="text-lg font-bold text-slate-900 mb-2">Guia de Estudo UML (Classes)</h4>
+                                    <p class="text-slate-600 text-sm mb-6 line-clamp-3">Visão geral do sistema, conceitos de UML, explicação detalhada das classes, relacionamentos e cenários de funcionamento prático.</p>
+                                </div>
+                                <div class="flex flex-col sm:flex-row items-center gap-4 mt-auto pt-4 border-t border-slate-100">
+                                    <button onclick="showDocument('doc-guia')" class="w-full sm:w-auto flex-1 bg-slate-700 hover:bg-slate-800 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">
+                                        Estudar material
+                                    </button>
+                                    <a href="Material de Estudo - UML.pdf" download="Material de Estudo - UML.pdf" class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 p-2 focus:outline-none focus:underline">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        PDF Original
+                                    </a>
+                                </div>
+                            </article>
+
+                            <!-- Card 2 -->
+                            <article class="material-card bg-white/90 rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col transition-all hover:shadow-md hover:border-slate-300">
+                                <div class="flex-grow">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 mb-4">Apresentação Anterior</span>
+                                    <h4 class="text-lg font-bold text-slate-900 mb-2">Roteiro — Diagrama de Classes</h4>
+                                    <p class="text-slate-600 text-sm mb-6 line-clamp-3">Roteiro da apresentação anterior abordando a estrutura das classes, heranças, composições e regras de negócio.</p>
+                                </div>
+                                <div class="flex flex-col sm:flex-row items-center gap-4 mt-auto pt-4 border-t border-slate-100">
+                                    <button onclick="showDocument('doc-roteiro')" class="w-full sm:w-auto flex-1 bg-slate-700 hover:bg-slate-800 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">
+                                        Estudar material
+                                    </button>
+                                    <a href="Roteiro de Apresentação.pdf" download="Roteiro de Apresentação.pdf" class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-1 p-2 focus:outline-none focus:underline">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        PDF Original
+                                    </a>
+                                </div>
+                            </article>
                         </div>
-                        <div>
-                            <h4 class="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Áudio Explicativo</h4>
-                            <p class="text-sm text-slate-500 mt-1">Explicação em áudio (.m4a) sobre o diagrama.</p>
-                            <span class="text-xs font-medium text-brand-600 mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">Ouvir áudio →</span>
+                    </div>
+
+                    <!-- Recursos Complementares Anteriores -->
+                    <div>
+                        <h4 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                            Recursos Complementares (Etapa Anterior)
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Recurso 1 -->
+                            <a href="Diagrama de Classes.html" target="_blank" class="material-card group bg-white/90 rounded-xl border border-slate-200 p-5 flex items-start gap-4 hover:border-brand-500 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <div class="p-3 bg-slate-50 text-slate-400 group-hover:text-brand-600 group-hover:bg-brand-50 rounded-lg transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Diagrama de Classes</h4>
+                                    <p class="text-sm text-slate-500 mt-1">Diagrama UML interativo em HTML.</p>
+                                    <span class="text-xs font-medium text-brand-600 mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">Abrir em nova aba →</span>
+                                </div>
+                            </a>
+
+                            <!-- Recurso 2 -->
+                            <a href="Diagrama Explicado.mp3" target="_blank" class="material-card group bg-white/90 rounded-xl border border-slate-200 p-5 flex items-start gap-4 hover:border-brand-500 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <div class="p-3 bg-slate-50 text-slate-400 group-hover:text-brand-600 group-hover:bg-brand-50 rounded-lg transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-slate-900 group-hover:text-brand-700 transition-colors">Áudio Explicativo</h4>
+                                    <p class="text-sm text-slate-500 mt-1">Explicação em áudio sobre o diagrama de classes.</p>
+                                    <span class="text-xs font-medium text-brand-600 mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">Ouvir áudio →</span>
+                                </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
 
                 </div>
             </section>
@@ -218,18 +323,15 @@
                 
                 <!-- Índice Lateral / Topo Mobile -->
                 <aside class="w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-24 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden z-20">
-                    <!-- Botão Toggle Mobile -->
                     <button id="toc-toggle" class="w-full flex items-center justify-between p-4 lg:hidden text-left focus:outline-none focus:bg-slate-50 transition-colors">
                         <span class="font-semibold text-slate-800">Índice do Conteúdo</span>
                         <svg id="toc-icon" class="w-5 h-5 text-slate-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     
-                    <!-- Título Desktop -->
                     <div class="hidden lg:block p-4 border-b border-slate-100 bg-slate-50">
                         <h3 class="font-semibold text-slate-800 text-sm uppercase tracking-wider">Nesta página</h3>
                     </div>
 
-                    <!-- Lista de links -->
                     <nav id="toc-menu" class="hidden lg:block max-h-[60vh] overflow-y-auto no-scrollbar p-2">
                         <ul id="toc-list" class="space-y-1">
                             <!-- Injetado via JS -->
@@ -241,7 +343,96 @@
                 <div class="w-full lg:flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-10">
                     <article class="prose prose-slate max-w-none prose-headings:font-semibold prose-a:text-brand-600 hover:prose-a:text-brand-700 prose-h1:text-3xl prose-h2:text-2xl prose-h2:border-b prose-h2:pb-2 prose-h2:mt-10 prose-table:mt-4">
                         
-                        <!-- CONTEÚDO 1: GUIA -->
+                        <!-- ========================================== -->
+                        <!-- NOVO CONTEÚDO: ROTEIRO DIAGRAMAS ATIVIDADES -->
+                        <!-- ========================================== -->
+                        <div id="doc-roteiro-atividades" class="doc-content hidden">
+                            <div class="not-prose mb-6 flex flex-wrap items-center gap-2">
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700">Atividade Atual</span>
+                                <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">UML — Diagrama de Atividades</span>
+                            </div>
+
+                            <h1>Apresentação dos Diagramas de Atividades</h1>
+                            <p class="lead text-lg text-slate-600">Sistema de Gerenciamento de Biblioteca</p>
+
+                            <!-- Personalizador rápido de nomes para o ensaio -->
+                            <div class="not-prose my-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">Personalizar nomes na leitura (opcional)</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label for="input-p2" class="block text-xs font-medium text-slate-600 mb-1">Nome da Pessoa 2</label>
+                                        <input type="text" id="input-p2" placeholder="Ex: João" oninput="updateSpeakerNames()" class="w-full px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                    </div>
+                                    <div>
+                                        <label for="input-p3" class="block text-xs font-medium text-slate-600 mb-1">Nome da Pessoa 3</label>
+                                        <input type="text" id="input-p3" placeholder="Ex: Maria" oninput="updateSpeakerNames()" class="w-full px-3 py-1.5 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Diagramas de referência rápida -->
+                            <h2>Diagramas de Referência</h2>
+                            <p>Clique em qualquer um dos diagramas abaixo para abrir em tela cheia enquanto acompanha o roteiro:</p>
+                            
+                            <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                                <div onclick="openImageModal('Diagrama-Emprestimo.png', 'Classe 1 - Realizar Empréstimo de Exemplar')" class="border border-slate-200 rounded-xl p-3 bg-slate-50 hover:border-brand-500 cursor-zoom-in transition-colors">
+                                    <p class="text-xs font-semibold text-brand-700 mb-2">Classe 1 — Realizar Empréstimo (Clique para ampliar)</p>
+                                    <img src="Diagrama-Emprestimo.png" alt="Diagrama de Empréstimo" class="w-full h-44 object-contain bg-white rounded-lg p-2 border border-slate-100">
+                                </div>
+                                <div onclick="openImageModal('Diagrama-Devolucao.png', 'Classe 2 - Realizar Devolução de Exemplar')" class="border border-slate-200 rounded-xl p-3 bg-slate-50 hover:border-brand-500 cursor-zoom-in transition-colors">
+                                    <p class="text-xs font-semibold text-brand-700 mb-2">Classe 2 — Realizar Devolução (Clique para ampliar)</p>
+                                    <img src="Diagrama-Devolucao.png" alt="Diagrama de Devolução" class="w-full h-44 object-contain bg-white rounded-lg p-2 border border-slate-100">
+                                </div>
+                            </div>
+
+                            <!-- PESSOA 1 -->
+                            <h2>Pessoa 1</h2>
+                            <p>Olá Professor Renan, nesta apresentação, a gente vai mostrar a modelagem de dois processos principais do nosso Sistema de Gerenciamento de Biblioteca, utilizando o Diagrama de Atividades da UML.</p>
+                            <p>São eles: <strong>realizar empréstimo de exemplar</strong> e <strong>realizar devolução de exemplar</strong>.</p>
+                            <p>Começando pelo diagrama de empréstimo, a gente organizou o fluxo em três raias, também chamadas de partições: <strong>Leitor</strong>, <strong>Serviço de Empréstimo</strong> e <strong>Gestão de Exemplares</strong>.</p>
+                            <p>Essa divisão não é apenas visual. Ela serve para separar as responsabilidades de cada participante dentro do processo. O leitor fica responsável por fazer a solicitação e receber o retorno. O Serviço de Empréstimo concentra as verificações e os registros das operações. Já a Gestão de Exemplares controla a disponibilidade e a situação dos itens do acervo.</p>
+                            <p>Na primeira classe, que é a de realizar empréstimo, o fluxo começa no nó inicial, representado pelo círculo, e segue para a solicitação do leitor.</p>
+                            <p>Essa solicitação chega ao Serviço de Empréstimo, que inicia duas verificações por meio de um <strong>Fork</strong>. Isso significa que o fluxo é dividido em duas atividades que podem acontecer simultaneamente: uma verifica a situação do leitor, enquanto a outra verifica a disponibilidade do exemplar.</p>
+                            <p>É importante observar que essas verificações acontecem em raias diferentes, respeitando as responsabilidades de cada parte do sistema.</p>
+                            <p>Quando as duas atividades terminam, temos uma barra de <strong>Join</strong>, que sincroniza os fluxos. Ou seja, o processo aguarda a conclusão das duas verificações antes de continuar.</p>
+                            <p>Depois dessa sincronização, chegamos ao primeiro nó de decisão, que avalia duas condições: se o leitor está apto e se o exemplar está disponível.</p>
+                            <p>A partir desse ponto, <strong class="speaker-p2 text-brand-700">Fernando</strong> vai explicar os dois caminhos possíveis dessa decisão, o restante do diagrama de empréstimo e o início do diagrama de devolução.</p>
+
+                            <!-- PESSOA 2 -->
+                            <h2>Pessoa 2</h2>
+                            <p>Continuando o diagrama de empréstimo, a partir desse nó de decisão, temos dois caminhos, definidos por condições chamadas de guardas.</p>
+                            <p>A primeira guarda é <span class="guarda-tag">[leitor apto e exemplar disponível]</span>. Quando essa condição é atendida, o sistema registra o empréstimo, atualiza a situação do exemplar para <code>EMPRESTADO</code> e, em seguida, confirma o empréstimo ao leitor, que recebe essa confirmação.</p>
+                            <p>Já no segundo caminho, identificado pela guarda <span class="guarda-tag">[caso contrário]</span>, o sistema identifica se existe alguma pendência relacionada ao leitor ou algum problema com a disponibilidade do exemplar. Depois, informa que não foi possível realizar o empréstimo e envia uma mensagem de impedimento ao leitor.</p>
+                            <p>Percebam que as guardas deixam explícitas as condições responsáveis por direcionar o fluxo para cada caminho.</p>
+                            <p>Ao final, os dois caminhos se encontram em um nó <strong>Merge</strong>. Diferentemente do Join, que sincroniza fluxos paralelos, o Merge reúne caminhos alternativos, permitindo que o processo siga para o encerramento, independentemente do resultado da decisão.</p>
+                            <p>Agora, passando para o segundo diagrama, que representa a realização da devolução de um exemplar, o processo começa quando o leitor solicita a devolução.</p>
+                            <p>O Serviço de Empréstimo recebe essa solicitação e executa uma atividade para localizar o empréstimo correspondente.</p>
+                            <p>Em seguida, temos um nó de decisão que verifica se esse empréstimo foi encontrado.</p>
+                            <p>Pelo caminho <span class="guarda-tag">[empréstimo não encontrado]</span>, o sistema informa que não existe um empréstimo ativo. Essa mensagem é recebida pelo leitor e o fluxo segue diretamente para o encerramento da atividade.</p>
+                            <p>Agora, <strong class="speaker-p3 text-brand-700">Jean</strong> vai continuar a partir do cenário em que o empréstimo é encontrado e explicar o restante do processo.</p>
+
+                            <!-- PESSOA 3 -->
+                            <h2>Pessoa 3</h2>
+                            <p>Continuando o diagrama de devolução, quando o sistema encontra um empréstimo ativo, ele verifica se a devolução está em atraso.</p>
+                            <p>Aqui temos novamente uma decisão com dois caminhos possíveis, definidos pelas respectivas guardas.</p>
+                            <p>Se a devolução estiver em atraso (<span class="guarda-tag">[em atraso]</span>), o sistema calcula o valor da multa e registra esse valor na conta de débitos do leitor.</p>
+                            <p>Já se estiver dentro do prazo (<span class="guarda-tag">[dentro do prazo]</span>), o sistema registra a devolução sem aplicar multa.</p>
+                            <p>Depois disso, os dois caminhos se encontram em um nó <strong>Merge</strong>. Como são caminhos alternativos de uma mesma decisão, não é necessário sincronizar atividades paralelas. Basta reunir os fluxos para dar continuidade ao processo.</p>
+                            <p>Em seguida, temos um <strong>Fork</strong>, que divide novamente o fluxo em duas frentes que acontecem ao mesmo tempo.</p>
+                            <p>Na primeira, o Serviço de Empréstimo encerra o empréstimo e registra a data da devolução.</p>
+                            <p>Na segunda, a Gestão de Exemplares atualiza a situação do exemplar para <code>DISPONÍVEL</code>.</p>
+                            <p>Quando essas duas atividades terminam, temos uma barra de <strong>Join</strong>, responsável por sincronizar os fluxos antes de continuar.</p>
+                            <p>Só depois dessa sincronização o sistema confirma a devolução ao leitor. O leitor recebe essa confirmação e o fluxo passa pelo Merge final, chegando ao nó final da atividade.</p>
+                            <p>Pra concluir, essa modelagem complementa o que a gente definiu no Diagrama de Classes.</p>
+                            <p>A classe <code>ServicoEmprestimo</code> concentra a coordenação das operações de empréstimo, devolução, multas e débitos.</p>
+                            <p>Já os Diagramas de Atividades mostram como essas operações acontecem na prática, representando o fluxo de controle, a divisão de responsabilidades entre as raias e as condições que determinam os caminhos do processo.</p>
+                            <p>Também conseguimos representar atividades simultâneas utilizando Fork e Join, e caminhos alternativos utilizando decisões com guardas e nós Merge.</p>
+                            <p>Outro ponto importante é que a modelagem representa o comportamento geral do sistema, sem precisar definir valores fixos para as multas ou detalhar regras internas que não fazem parte do escopo desses diagramas.</p>
+                            <p>Com isso, os diagramas deixam mais claro como os processos funcionam e como as diferentes partes do sistema trabalham em conjunto.</p>
+                            <p>E é isso. Agradecemos a atenção!</p>
+                        </div>
+
+                        <!-- CONTEÚDO 1 (ANTERIOR): GUIA -->
                         <div id="doc-guia" class="doc-content hidden">
                             <h1>Guia de Estudo UML</h1>
                             <p class="lead text-lg text-slate-600">Sistema de Gerenciamento de Biblioteca</p>
@@ -399,10 +590,10 @@
 
                         </div>
 
-                        <!-- CONTEÚDO 2: ROTEIRO -->
+                        <!-- CONTEÚDO 2 (ANTERIOR): ROTEIRO CLASSES -->
                         <div id="doc-roteiro" class="doc-content hidden">
                             <h1>Roteiro de Apresentação UML</h1>
-                            <p class="lead text-lg text-slate-600">Defesa de Projeto - Divisão de Falas</p>
+                            <p class="lead text-lg text-slate-600">Defesa de Projeto (Diagrama de Classes) - Divisão de Falas</p>
 
                             <h2>Pessoa 1 - Introdução e Catálogo</h2>
                             <p>Nosso objetivo hoje é apresentar como funciona o Sistema de Gerenciamento de Biblioteca, focando nas operações reais de quem utiliza e de quem administra o espaço. Vamos explicar a estrutura do sistema acompanhando a jornada de um livro e de um leitor.</p>
@@ -452,6 +643,26 @@
 
     </main>
 
+    <!-- MODAL DE ZOOM DAS IMAGENS DOS DIAGRAMAS -->
+    <div id="image-modal" class="fixed inset-0 z-50 hidden bg-slate-900/85 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeImageModal()">
+        <div class="bg-white rounded-2xl max-w-6xl w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+            <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+                <h3 id="modal-title" class="font-bold text-slate-900 text-sm sm:text-base">Diagrama</h3>
+                <div class="flex items-center gap-2">
+                    <a id="modal-download" href="#" download class="text-xs font-medium text-slate-600 hover:text-brand-700 bg-white border border-slate-200 px-3 py-1.5 rounded-lg transition-colors">
+                        Baixar PNG
+                    </a>
+                    <button onclick="closeImageModal()" class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-200 rounded-lg transition-colors" aria-label="Fechar visualização">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-4 sm:p-6 overflow-auto bg-white flex items-center justify-center">
+                <img id="modal-img" src="" alt="Diagrama Ampliado" class="max-w-full h-auto">
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-white border-t border-slate-200 mt-auto">
         <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-slate-500">
             Projeto Acadêmico - Sistema de Gerenciamento de Biblioteca
@@ -471,30 +682,97 @@
         const tocIcon = document.getElementById('toc-icon');
         const activeDownloadBtn = document.getElementById('active-download-btn');
 
+        // Controle da seção recolhida (Atividades anteriores)
+        const archiveContent = document.getElementById('archive-content');
+        const archiveChevron = document.getElementById('archive-chevron');
+        const archiveToggleLabel = document.getElementById('archive-toggle-label');
+        const archiveToggleBtn = document.getElementById('archive-toggle-btn');
+
+        function toggleArchiveSection(forceOpen = null) {
+            const isHidden = archiveContent.classList.contains('hidden');
+            const shouldOpen = forceOpen !== null ? forceOpen : isHidden;
+
+            if (shouldOpen) {
+                archiveContent.classList.remove('hidden');
+                archiveChevron.classList.add('rotate-180');
+                archiveToggleLabel.textContent = 'Ocultar';
+                archiveToggleBtn.setAttribute('aria-expanded', 'true');
+            } else {
+                archiveContent.classList.add('hidden');
+                archiveChevron.classList.remove('rotate-180');
+                archiveToggleLabel.textContent = 'Mostrar';
+                archiveToggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        // Modal de Zoom das Imagens
+        const imageModal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDownload = document.getElementById('modal-download');
+
+        function openImageModal(src, title) {
+            modalImg.src = src;
+            modalTitle.textContent = title;
+            modalDownload.href = src;
+            modalDownload.download = src;
+            imageModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            imageModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !imageModal.classList.contains('hidden')) {
+                closeImageModal();
+            }
+        });
+
+        // Atualização dinâmica dos nomes no roteiro atual
+        function updateSpeakerNames() {
+            const p2 = document.getElementById('input-p2').value.trim();
+            const p3 = document.getElementById('input-p3').value.trim();
+
+            document.querySelectorAll('.speaker-p2').forEach(el => {
+                el.textContent = p2 ? p2 : '[Nome da Pessoa 2]';
+            });
+            document.querySelectorAll('.speaker-p3').forEach(el => {
+                el.textContent = p3 ? p3 : '[Nome da Pessoa 3]';
+            });
+        }
+
         // Mostra um documento e constrói o índice
         function showDocument(docId) {
-            // Alterna visibilidade principal
             homeView.classList.add('hidden');
             readingView.classList.remove('hidden');
             window.scrollTo(0, 0);
 
-            // Esconde todos os textos, mostra o solicitado
             document.querySelectorAll('.doc-content').forEach(el => el.classList.add('hidden'));
             const activeDoc = document.getElementById(docId);
             activeDoc.classList.remove('hidden');
 
-            // Atualiza o botão de download de acordo com o doc aberto
+            // Controla visibilidade do botão de PDF original conforme o documento
             if (docId === 'doc-guia') {
+                activeDownloadBtn.classList.remove('hidden');
+                activeDownloadBtn.classList.add('inline-flex');
                 activeDownloadBtn.href = "Material de Estudo - UML.pdf";
                 activeDownloadBtn.download = "Material de Estudo - UML.pdf";
             } else if (docId === 'doc-roteiro') {
+                activeDownloadBtn.classList.remove('hidden');
+                activeDownloadBtn.classList.add('inline-flex');
                 activeDownloadBtn.href = "Roteiro de Apresentação.pdf";
                 activeDownloadBtn.download = "Roteiro de Apresentação.pdf";
+            } else {
+                // Oculta o botão de PDF antigo no novo roteiro
+                activeDownloadBtn.classList.add('hidden');
+                activeDownloadBtn.classList.remove('inline-flex');
             }
 
             buildTOC(activeDoc);
             
-            // Garante que o menu mobile inicie fechado
             tocMenu.classList.add('hidden');
             tocMenu.classList.remove('block');
             tocIcon.classList.remove('rotate-180');
@@ -518,7 +796,6 @@
             }
 
             headings.forEach((h, index) => {
-                // Garante que todo h2 tenha um ID único
                 const id = `toc-heading-${index}`;
                 h.id = id;
 
@@ -529,9 +806,8 @@
                 a.textContent = h.textContent;
                 a.className = 'block text-sm text-slate-600 hover:text-brand-700 hover:bg-brand-50 px-3 py-2 rounded-md transition-colors';
                 
-                // Fecha menu no mobile ao clicar num link
-                a.addEventListener('click', (e) => {
-                    if (window.innerWidth < 1024) { // 1024px é o bg-lg do tailwind
+                a.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) {
                         tocMenu.classList.add('hidden');
                         tocMenu.classList.remove('block');
                         tocIcon.classList.remove('rotate-180');
@@ -543,21 +819,31 @@
             });
         }
 
-        // Funcionalidade de Busca
+        // Funcionalidade de Busca (abre automaticamente os arquivados se houver resultado lá)
         searchInput.addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
+            const term = e.target.value.toLowerCase().trim();
+            let foundInArchive = false;
             
             materialCards.forEach(card => {
                 const text = card.textContent.toLowerCase();
                 if (text.includes(term)) {
                     card.style.display = 'flex';
+                    if (term !== '' && archiveContent.contains(card)) {
+                        foundInArchive = true;
+                    }
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            if (term === '') {
+                toggleArchiveSection(false);
+            } else if (foundInArchive) {
+                toggleArchiveSection(true);
+            }
         });
 
-        // Funcionalidade do Toggle do Menu (Mobile)
+        // Toggle do Menu (Mobile)
         tocToggle.addEventListener('click', () => {
             if (tocMenu.classList.contains('hidden')) {
                 tocMenu.classList.remove('hidden');
@@ -570,18 +856,16 @@
             }
         });
 
-        // Tratamento de resize para garantir exibição correta do TOC
+        // Tratamento de resize
         window.addEventListener('resize', () => {
-            if (window.innerWidth >= 1024) { // Desktop
+            if (window.innerWidth >= 1024) {
                 tocMenu.classList.remove('hidden');
                 tocMenu.classList.add('block');
             } else if (!readingView.classList.contains('hidden') && !tocIcon.classList.contains('rotate-180')) {
-                 // Se estiver no mobile e o ícone não estiver rotacionado (fechado)
                 tocMenu.classList.add('hidden');
                 tocMenu.classList.remove('block');
             }
         });
-
     </script>
 </body>
 </html>
